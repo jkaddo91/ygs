@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:you_got_served/screens/widgets/ygs_password_form_field.dart';
 import 'package:you_got_served/screens/widgets/ygs_raised_button.dart';
 import 'package:you_got_served/screens/widgets/ygs_text_form_field.dart';
 import 'package:you_got_served/services/auth_service.dart';
+import 'package:you_got_served/view_models/auth_wrapper_vm.dart';
 
 class SignInScreen extends StatefulWidget {
-  final Function gotoSignUpScreen;
-
-  SignInScreen({@required this.gotoSignUpScreen});
-
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final AuthService _authService = AuthService();
   final _formKey = GlobalKey<FormState>();
   String userName = '';
   String password = '';
@@ -32,10 +29,16 @@ class _SignInScreenState extends State<SignInScreen> {
     });
   }
 
-  void _logIn(BuildContext ctx) async {
+  void _logIn() {
     if (_formKey.currentState.validate()) {
-      await _authService.signIn(userName, password);
+      Provider.of<AuthService>(context, listen: false)
+          .signIn(userName, password);
     }
+  }
+
+  void _gotoSignUpScreen() {
+    Provider.of<AuthWrapperViewModel>(context, listen: false)
+        .toggleSignInSignUp();
   }
 
   @override
@@ -87,14 +90,14 @@ class _SignInScreenState extends State<SignInScreen> {
                   //logIn Button
                   YgsRaisedButton(
                     text: 'Log In',
-                    onPressed: () async {
-                      _logIn(context);
+                    onPressed: () {
+                      _logIn();
                     },
                   ),
                   //Sign up
                   FlatButton(
                     onPressed: () {
-                      widget.gotoSignUpScreen();
+                      _gotoSignUpScreen();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

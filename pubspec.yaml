@@ -12,6 +12,7 @@ dependencies:
   http: any
   shared_preferences: any
   provider: ^3.1.0
+  rxdart: ^0.24.1
 
   cupertino_icons: ^0.1.2
   font_awesome_flutter: ^8.5.0

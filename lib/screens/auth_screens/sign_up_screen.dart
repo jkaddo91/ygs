@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:you_got_served/screens/widgets/ygs_raised_button.dart';
 import 'package:you_got_served/screens/widgets/ygs_text_form_field.dart';
-import 'package:you_got_served/services/auth_service.dart';
+import 'package:you_got_served/view_models/auth_wrapper_vm.dart';
 
 class SignUpScreen extends StatefulWidget {
-  final Function gotoSignInScreen;
-
-  SignUpScreen({@required this.gotoSignInScreen});
-
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final AuthService _authService = AuthService();
   final _formKey = GlobalKey<FormState>();
 
   String phoneNumber = '';
@@ -23,6 +19,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
       phoneNumber = val;
     });
+  }
+
+  void _gotoSignInScreen() {
+    Provider.of<AuthWrapperViewModel>(context, listen: false)
+        .toggleSignInSignUp();
   }
 
   void _signupScreen() async {
@@ -86,7 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   //Sign up
                   FlatButton(
                     onPressed: () {
-                      widget.gotoSignInScreen();
+                      _gotoSignInScreen();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
